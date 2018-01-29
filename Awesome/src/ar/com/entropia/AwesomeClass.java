@@ -1,4 +1,4 @@
-package main.ar.com.lab.entropia;
+package ar.com.entropia;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

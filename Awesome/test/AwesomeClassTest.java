@@ -1,3 +1,6 @@
+import ar.com.entropia.AwesomeClass;
+import org.junit.Assert;
+
 import static org.junit.Assert.*;
 
 /**
@@ -22,6 +25,7 @@ public class AwesomeClassTest {
 
     @org.junit.Test
     public void addOneTo() throws Exception {
+        Assert.assertEquals(AwesomeClass.addOneTo(1),Integer.valueOf(2));
     }
 
 }
