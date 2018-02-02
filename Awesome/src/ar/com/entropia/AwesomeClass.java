@@ -1,5 +1,7 @@
 package ar.com.entropia;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -36,9 +38,39 @@ public class AwesomeClass {
         return compute((a) -> -a, toInvert);
     }
 
+    public Integer crazyStuf(Integer i){
+        return highOrderCrazyStuf(x->x++,i);
+    }
+
+    public Integer highOrderCrazyStuf(Function<Integer,Integer> function, Integer number){
+        return function.apply(number);
+    }
+
+
+    public Integer adder(Integer first, Integer second){
+        BiFunction<Integer, Integer, Integer> adder = (a, b) -> a + b;
+        return adder.apply(first,second);
+    }
+
     public static Integer addOneTo(Integer i){
         return addOne.apply(i);
     }
 
     public static Function <Integer,Integer> addOne = x -> x + 1;
+
+    public static void listingOptional(AwesomeOptionalClass awesomeOptionalClass){
+        Optional optional = Optional.ofNullable(awesomeOptionalClass.getStringList());
+        if(optional.isPresent()){
+            awesomeOptionalClass.getStringList().stream().forEach(System.out::println);
+        }
+    }
+
+    public static String firstItem(AwesomeOptionalClass awesomeOptionalClass){
+        Optional<List<String>> optional = Optional.ofNullable(awesomeOptionalClass.getStringList());
+        String result = "LISTA EN NULL";
+        if(optional.isPresent()){
+            result = optional.get().stream().findFirst().orElse("LISTA VACIA");
+        }
+        return result;
+    }
 }
