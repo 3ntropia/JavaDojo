@@ -4,7 +4,6 @@ import org.junit.Assert;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 
 /**
  * Created by marti on 29/1/2018.
