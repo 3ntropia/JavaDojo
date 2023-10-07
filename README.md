@@ -1,4 +1,4 @@
-![Java Badge](https://img.shields.io/badge/-Java-red?style=flat-square&logo=java&logoColor=white) # JavaDojo 
+# JavaDojo
 
 This repository contains solutions to various Java programming challenges.
 
