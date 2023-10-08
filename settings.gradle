@@ -1,6 +1,4 @@
 rootProject.name = 'JavaDojo'
-include 'HcakerRank'
-include 'Awesome'
 include 'Codility'
 include 'Patterns'
 include 'HackerRank'
