@@ -23,13 +23,15 @@
 public class ParityDegree {
     public int solution(int N) {
         // Implement your solution here
-        int divisor = 1;
+        int divisor = 0;
         double max = Math.sqrt(N);
         int last = divisor;
         for(int i = divisor;i<=max;i++){
-            if(N % i == 0)
+            double p = Math.pow(2, i);
+            if(N % p == 0){
                 last = i;
+            }
         }
-        return last-1;
+        return last;
     }
 }
