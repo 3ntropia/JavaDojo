@@ -36,15 +36,12 @@ public class DreamCode {
 
     public static String[] solution(int categoryID) {
         // Implement your solution here
-        Map<Integer, Category> listTree = buildHierarchy(data);
+        Map<Integer, Category> categoryMap = buildHierarchy(data);
 
-        Optional<Category> optionalCategory = findCategory(categoryID, listTree);
+        int level = findFathersCategory(categoryID, categoryMap, 0);
+        String keywordsCategory = findKeywordsCategory(categoryID, categoryMap);
 
-        if(optionalCategory.isPresent()){
-            Category category = optionalCategory.get();
-            return new String[]{String.valueOf(category.getLevel()), category.getKeyWords()};
-        }
-        return new String[]{};
+        return new String[]{String.valueOf(level), keywordsCategory};
     }
 
     /**
@@ -54,7 +51,6 @@ public class DreamCode {
      */
     private static Map<Integer, Category> buildHierarchy(Object[][] data) {
         Map<Integer, Category> listTree = new HashMap<>();
-        //starting from 1 to avoid edge case of the first row
         for (Object[] row : data) {
             Category category = new Category();
             category.setID((Integer) row[0]);
@@ -69,39 +65,36 @@ public class DreamCode {
     /**
      * Add category to the tree in the corresponding level
      *
-     * @param listTree
+     * @param mapTree
      * @param category
      */
-    private static void addCategory(Map<Integer, Category> listTree, Category category){
+    private static void addCategory(Map<Integer, Category> mapTree, Category category){
         if(category.getParentId() == ROOT_LEVEL) {
-            listTree.put(category.getID(), category);
+            mapTree.put(category.getID(), category);
         }
-        if(listTree.containsKey(category.getParentId())) {
-            listTree.get(category.getParentId()).getSubCategories().add(category);
-            listTree.put(category.getID(), category);
+        if(mapTree.containsKey(category.getParentId())) {
+            category.setTopCategory(mapTree.get(category.getParentId()));
+            mapTree.get(category.getParentId()).getSubCategories().add(category);
+            mapTree.put(category.getID(), category);
         }
-        /*
-        else {
-
-            if(category.getKeyWords().isEmpty() && child.getLevel()>=1){
-                category.setKeyWords(child.getKeyWords());
-            }
-            addCategory(child.getSubCategories(), category);
-        }
-         */
     }
 
-    private static Optional<Category> findCategory(int categoryID, Map<Integer, Category> categories){
-        Optional<Category> result = Optional.empty();
-        for(Map.Entry<Integer, Category> entry: categories.entrySet()){
-            for(Category child: entry.getValue().getSubCategories()){
-                if(categoryID == child.getID()){
-                    return Optional.of(child);
-                }
-            }
+    private static int findFathersCategory(int categoryID, Map<Integer, Category> categories, int level){
+        Category category = categories.get(categoryID);
+        if(category.getParentId() == ROOT_LEVEL) {
+            return level;
+        }else {
+            return findFathersCategory(category.getTopCategory().getID(), categories, ++level);
         }
+    }
 
-        return result;
+    private static String findKeywordsCategory(int categoryID, Map<Integer, Category> categories){
+        Category category = categories.get(categoryID);
+        if(category.getParentId() == ROOT_LEVEL || !category.getKeyWords().isBlank()) {
+            return category.getKeyWords();
+        }else {
+            return findKeywordsCategory(category.getTopCategory().getID(), categories);
+        }
     }
 
     public static class Category{
@@ -110,7 +103,6 @@ public class DreamCode {
         private String name;
         private String keyWords;
         private Integer parentId;
-        private Integer level = 0;
         private Integer ID;
 
         public Category() {
@@ -122,14 +114,6 @@ public class DreamCode {
 
         public void setTopCategory(Category topCategory) {
             this.topCategory = topCategory;
-        }
-
-        public Integer getLevel() {
-            return level;
-        }
-
-        public void setLevel(Integer level) {
-            this.level = level;
         }
 
         public Integer getID() {
