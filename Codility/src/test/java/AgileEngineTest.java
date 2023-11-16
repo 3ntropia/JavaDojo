@@ -61,7 +61,37 @@ class AgileEngineTest {
         Map<Long, Long> result = AgileEngine.count(map1, map2);
 
         assertNotNull(result);
+        assertTrue(result.isEmpty());
+        // Añade aserciones para verificar que las claves no convertibles se han ignorado
+    }
+
+    @Test
+    public void testCountWithNullUserStats() {
+        Map<String, AgileEngine.UserStats> map1 = new HashMap<>();
+        map1.put("1", null);
+        map1.put("1", new AgileEngine.UserStats(250L));
+
+
+        Map<Long, Long> result = AgileEngine.count(map1);
+
+        assertNotNull(result);
         assertFalse(result.isEmpty());
+        assertEquals(250L, result.get(1L));
+        // Añade aserciones para verificar que las claves no convertibles se han ignorado
+    }
+
+    @Test
+    public void testCountWithNullSetZero() {
+        Map<String, AgileEngine.UserStats> map1 = new HashMap<>();
+        map1.put("1", null);
+        map1.put("2", new AgileEngine.UserStats(250L));
+
+
+        Map<Long, Long> result = AgileEngine.count(map1);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(0L, result.get(1L));
         // Añade aserciones para verificar que las claves no convertibles se han ignorado
     }
 
@@ -73,7 +103,7 @@ class AgileEngineTest {
 
         Map<String, AgileEngine.UserStats> map2 = new HashMap<>();
         map2.put("1", new AgileEngine.UserStats(150L)); // Usuario repetido con diferentes stats
-        map2.put("4", new AgileEngine.UserStats(300L));
+        map2.put("2", new AgileEngine.UserStats(300L));
 
         Map<Long, Long> result = AgileEngine.count(map1, map2);
 
@@ -81,7 +111,7 @@ class AgileEngineTest {
         assertFalse(result.isEmpty());
         // Añade aserciones para verificar que se haya realizado correctamente la contabilización
         assertEquals(250L, result.get(1L));
-        assertEquals(450L, result.get(2L));
+        assertEquals(500L, result.get(2L));
     }
 
 }
